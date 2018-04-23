@@ -13,6 +13,8 @@ int main()
 		printf("pos: %d = %d\n", i, vector_get(vec, i, tmp));
 	}
 
+	printf("vector size : %lu\n", vector_size(vec));
+
 	vector_destroy(vec);
 
 	return 0;

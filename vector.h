@@ -32,38 +32,25 @@
 		container = __tmp->vect[pos]; 			\
 })
 
-#define vector_set(vec, pos, val) do {					    \
-	assert(vec &&							    \
-	       "vector might no be NULL pointer");		    	    \
-	struct __vector_ { 	     					    \
-		typeof(val) *vect;  					    \
-		size_t length;		     				    \
-		size_t max;						    \
-	};				     				    \
-	struct __vector_ *__tmp = (void *)vec; 				    \
-	if (__tmp->max >= __tmp->length - 1) { 				    \
-		__tmp->length *= 2; 					    \
-		__tmp->vect = realloc(__tmp->vect, 			    \
-				      sizeof(*__tmp->vect) * __tmp->length);\
-	}								    \
-	if (pos > __tmp->max)						    \
-		__tmp->max = pos;					    \
-									    \
-	__tmp->vect[pos] = val; 					    \
-} while(0)
-
-#define vector_destroy(vec) do {				\
-	assert(vec &&						\
-	       "vector might no be NULL pointer");	  	\
-	struct __vector_ { 	     				\
-		void *vect;  					\
-		size_t length;		     			\
-		size_t max;					\
-	};				     			\
-	struct __vector_ *__tmp = (void *)vec; 			\
-	free(__tmp->vect);					\
-	free(__tmp);						\
-} while(0)
+//#define vector_set(vec, pos, val) do {					    \
+//	assert(vec &&							    \
+//	       "vector might no be NULL pointer");		    	    \
+//	struct __vector_ { 	     					    \
+//		typeof(val) *vect;  					    \
+//		size_t length;		     				    \
+//		size_t max;						    \
+//	};				     				    \
+//	struct __vector_ *__tmp = (void *)vec; 				    \
+//	if (__tmp->max >= __tmp->length - 1) { 				    \
+//		__tmp->length *= 2; 					    \
+//		__tmp->vect = realloc(__tmp->vect, 			    \
+//				      sizeof(*__tmp->vect) * __tmp->length);\
+//	}								    \
+//	if (pos > __tmp->max)						    \
+//		__tmp->max = pos;					    \
+//									    \
+//	__tmp->vect[pos] = val; 					    \
+//} while(0)
 
 #define vector_append(vec, val) do {					    \
 	assert(vec &&							    \
@@ -82,3 +69,28 @@
 	__tmp->max++;							    \
 	__tmp->vect[__tmp->max] = val;					    \
 } while (0)
+
+static inline void vector_destroy(void *vec)
+{
+	assert(vec && "vector might no be NULL pointer");
+	struct __vector_ {
+		void *vect;
+		size_t length;
+		size_t max;
+	};
+	struct __vector_ *__tmp = (void *)vec;
+	free(__tmp->vect);
+	free(__tmp);
+}
+
+static inline size_t vector_size(void *vec)
+{
+	struct __vector__ {
+		void *vect;
+		size_t length;
+		size_t max;
+	};
+
+	struct __vector__ *tmp = vec;
+	return tmp->max + 1;
+}
